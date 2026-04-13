@@ -1,6 +1,6 @@
-from flask import Flask
 from config import configs
 from app.extensions import db, login_manager
+from flask import Flask
 
 def create_app():
     
@@ -10,6 +10,17 @@ def create_app():
     # add extensions here 
     db.init_app(app)
     login_manager.init_app(app)
+    
+    # login manager with models configs 
+    from app.models import User
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(user_id)
+    
+    # init db with app context
+    with app.app_context():
+        db.create_all()
+    
     # add blueprints here
     from app.main import main
     app.register_blueprint(main)

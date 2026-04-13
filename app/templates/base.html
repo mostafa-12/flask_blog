@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +31,7 @@
                             Home
                         </a>
                     </li>
+                    {% if current_user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'main.posts' %}active{% endif %}" href="{{ url_for('main.posts') }}">
                             Posts
@@ -43,6 +45,14 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.profile') }}">
+                                <img src="{{ url_for('static', filename='pics/' + current_user.profile_picture) }}" alt="{{ current_user.username }}" 
+                                     class="rounded-circle" width="32" height="32">
+                            </a>
+                        </li>
+                    {% else %}
                         <li class="nav-item">
                             <a class="nav-link {% if request.endpoint == 'auth.login' %}active{% endif %}" href="{{ url_for('auth.login') }}">
                                 Login
@@ -53,6 +63,7 @@
                                 Signup
                             </a>
                         </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
