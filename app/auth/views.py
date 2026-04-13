@@ -1,5 +1,5 @@
 from app.auth import auth
-from app.auth.forms import LoginForm, RegistrationForm
+from app.auth.forms import ChangePasswordForm, LoginForm, RegistrationForm
 from app.models import User
 from app.extensions import db
 from flask import render_template, flash, redirect, url_for
@@ -50,3 +50,21 @@ def logout():
     logout_user()
     flash("You have been logged out.", "info")
     return redirect(url_for('main.home'))
+
+
+@auth.route('/change_password', methods=["GET", "POST"])
+@login_required
+def change_password():
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        current_user.password = form.new_password.data
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error occurred while changing password: {e}")
+            flash("An error occurred while changing your password. Please try again.", "danger")
+            return redirect(url_for('auth.change_password'))
+        flash("Your password has been changed successfully!", "success")
+        return redirect(url_for('main.profile', username=current_user.username))
+    return render_template('auth/change_password.html', title='Change Password', form=form)

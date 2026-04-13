@@ -3,7 +3,7 @@ class BaseConfig:
     """Base configuration."""
     
     SECRET_KEY = "very secret key"
-    
+    UPLOAD_FOLDER = "app/static/"
     @staticmethod
     def init_app(app):
         pass

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-sm" style="width: 100%; max-width: 500px; border-radius: 0.5rem;">
+        <div class="card-body p-4 p-md-5">
+            <!-- Profile Preview Section -->
+            <div class="text-center mb-4">
+                {% if current_user.profile_picture %}
+                    <img src="{{ url_for("static", filename='pics/' + current_user.profile_picture) }}" alt="Profile Picture" 
+                         class="rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover;">
+                {% else %}
+                    <div class="rounded-circle mb-3 d-inline-flex align-items-center justify-content-center" 
+                         style="width: 80px; height: 80px; background-color: #e9ecef;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                {% endif %}
+                <h5 class="mb-1">{{ current_user.username }}</h5>
+                <p class="text-muted small">Update your profile information</p>
+            </div>
+
+            <!-- Edit Profile Form -->
+            <form method="POST" action="{{ url_for('services.edit_profile') }}" enctype="multipart/form-data" novalidate>
+                {{ form.hidden_tag() }}
+
+                <!-- Username Field -->
+                <div class="mb-3">
+                    {{ form.username.label(class="form-label") }}
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-control is-invalid") }}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.username.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.username(class="form-control") }}
+                    {% endif %}
+                </div>
+
+                <!-- Email Field -->
+                <div class="mb-3">
+                    {{ form.email.label(class="form-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control is-invalid") }}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.email.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control") }}
+                    {% endif %}
+                </div>
+
+                <!-- Profile Picture Field -->
+                <div class="mb-4">
+                    {{ form.picture.label(class="form-label") }}
+                    {% if form.picture.errors %}
+                        {{ form.picture(class="form-control is-invalid") }}
+                        <div class="invalid-feedback d-block">
+                            {% for error in form.picture.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.picture(class="form-control") }}
+                    {% endif %}
+                    <small class="form-text text-muted d-block mt-2">JPG, PNG, or GIF (Max 5MB)</small>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-grid gap-2">
+                    {{ form.submit(class="btn btn-primary mb-2") }}
+                    <a href="{{ url_for('main.profile') }}" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+            <!-- Reset Password Section -->
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="small text-muted mb-2">Need to change your password?</p>
+                <a href="{{ url_for('auth.change_password') }}" class="btn btn-sm btn-outline-info">Reset Password</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

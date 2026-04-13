@@ -26,7 +26,8 @@ def create_app():
     app.register_blueprint(main)
     from app.auth import auth
     app.register_blueprint(auth)
-    
+    from app.services import services
+    app.register_blueprint(services)
     
     # return the app instance
     return app

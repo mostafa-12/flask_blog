@@ -27,7 +27,7 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=GET_TIME_NOW)
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     comments = db.relationship("Comment", backref="post", lazy="dynamic")
-    
+    cover_image = db.Column(db.String(256), default="default_post.jpg")
     def __repr__(self):
         return f"<Post {self.title}, {self.timestamp}>"
     
