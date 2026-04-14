@@ -1,7 +1,8 @@
 from . import services
 from app.extensions import db
 from app.utilities import save_pic_secure
-from .forms import EditProfileForm
+from .forms import EditProfileForm, PostForm
+from app.models import Post
 from flask import render_template, flash, request, url_for, redirect
 from flask_login import login_required
 from flask_login import current_user
@@ -33,3 +34,47 @@ def edit_profile():
     return render_template('services/edit_profile.html', title='Edit Profile', form = form)
 
 
+@services.route("/create_post", methods=['GET', 'POST'])
+@login_required
+def create_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(
+            title = form.title.data,
+            content = form.content.data,
+            author = current_user
+        )
+        cover = save_pic_secure(form.cover_image.data)
+        post.cover_image = cover if cover else "default_post.jpg"
+        try:
+            db.session.add(post)
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            flash('An error occurred while saving the post. Please try again.', 'danger')
+            return redirect(url_for("services.create_post"))
+        flash("Post posted successfully", "success")
+        return redirect(url_for("main.profile"))
+    return render_template('services/create_post.html', title='Create Post', form=form)
+
+@services.route("/remove_post/<int:post_id>", methods=['POST'])
+@login_required
+def remove_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author.id != current_user.id:
+        flash("You are not authorized to delete this post.", "danger")
+        return redirect(url_for("main.profile"))
+    try:
+        db.session.delete(post)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        flash('An error occurred while deleting the post. Please try again.', 'danger')
+        return redirect(url_for("main.profile"))
+    flash("Post deleted successfully", "success")
+    return redirect(url_for("main.profile"))
+
+@services.route("/edit_post/<int:post_id>", methods=['GET', 'POST'])
+@login_required
+def edit_post(post_id):
+    return "Edit Post - Coming Soon!"

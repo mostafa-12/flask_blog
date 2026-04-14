@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-sm border-0 rounded">
+                <div class="card-header bg-white border-bottom">
+                    <h2 class="mb-0 fw-bold">Create New Post</h2>
+                    <p class="text-muted small mb-0">Share your thoughts with the community</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Title Field -->
+                        <div class="mb-4">
+                            <label for="{{ form.title.id }}" class="form-label fw-500">
+                                {{ form.title.label }}
+                            </label>
+                            {% if form.title.errors %}
+                                {{ form.title(class="form-control is-invalid", placeholder="Enter post title") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.title.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.title(class="form-control", placeholder="Enter post title") }}
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Content Field -->
+                        <div class="mb-4">
+                            <label for="{{ form.content.id }}" class="form-label fw-500">
+                                {{ form.content.label }}
+                            </label>
+                            <small class="text-muted d-block mb-2">Markdown formatting is supported</small>
+                            {% if form.content.errors %}
+                                {{ form.content(class="form-control is-invalid", rows="8", placeholder="Write your post content here...") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.content.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.content(class="form-control", rows="8", placeholder="Write your post content here...") }}
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Image Upload Field -->
+                        <div class="mb-4">
+                            <label for="{{ form.cover_image.id }}" class="form-label fw-500">
+                                {{ form.cover_image.label }}
+                            </label>
+                            <small class="text-muted d-block mb-2">Upload a cover image (optional)</small>
+                            {% if form.cover_image.errors %}
+                                {{ form.cover_image(class="form-control is-invalid", accept="image/*") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.cover_image.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.cover_image(class="form-control", accept="image/*") }}
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Form Actions -->
+                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-end mt-5">
+                            <a href="{{ url_for('main.profile') }}" class="btn btn-secondary">
+                                Cancel
+                            </a>
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

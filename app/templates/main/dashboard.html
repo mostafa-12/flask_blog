@@ -26,39 +26,44 @@
         <div class="col-lg-6 mb-4">
             <!-- Create Post Button -->
             <div class="mb-3">
-                <a href="#" class="btn btn-primary w-100">+ Create Post</a>
+                <a href="{{url_for('services.create_post')}}" class="btn btn-primary w-100">+ Create Post</a>
             </div>
 
             <!-- Posts List -->
-            {% if user_posts %}
-                {% for post in user_posts %}
-                    <div class="card shadow-sm mb-3">
-                        <div class="card-body p-3">
-                            <h5 class="card-title mb-2">
-                                <a href="#" class="text-decoration-none">{{ post.title }}</a>
-                            </h5>
-                            <p class="card-text text-muted small mb-2">
-                                {{ post.created_at.strftime('%B %d, %Y') }}
-                            </p>
-                            <p class="card-text mb-3">
-                                {{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}
-                            </p>
-                            <div class="d-flex gap-2">
-                                <a href="#" class="btn btn-sm btn-outline-primary">View</a>
-                                <a href="#" class="btn btn-sm btn-outline-warning">Edit</a>
-                                <a href="#" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?');">Delete</a>
+            {% if current_user.posts %}
+                            {% for post in current_user.posts %}
+                                <div class="card shadow-sm mb-3">
+                                    {% if post.cover_image %}
+                                        <img src="{{ url_for('static', filename='pics/' + post.cover_image) }}" alt="{{ post.title }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                    {% endif %}
+                                    <div class="card-body p-3">
+                                        <h5 class="card-title mb-2">
+                                            <a href="#" class="text-decoration-none">{{ post.title }}</a>
+                                        </h5>
+                                        <p class="card-text text-muted small mb-2">
+                                            {{ post.timestamp.strftime('%b %d, %Y at %I:%M %p') }}
+                                        </p>
+                                        <p class="card-text mb-3">
+                                            {{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}
+                                        </p>
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ url_for('main.get_post', post_id=post.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                            <a href="{{ url_for('services.edit_post', post_id=post.id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                            <form action="{{ url_for('services.remove_post', post_id=post.id) }}" method="POST" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="card shadow-sm">
+                                <div class="card-body p-3 text-center">
+                                    <p class="text-muted mb-0">You haven't posted yet.</p>
+                                    <a href="{{ url_for('services.create_post') }}" class="btn btn-sm btn-primary mt-2">Create your first post</a>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="card shadow-sm">
-                    <div class="card-body p-3 text-center">
-                        <p class="text-muted mb-0">You haven't posted yet.</p>
-                        <a href="#" class="btn btn-sm btn-primary mt-2">Create your first post</a>
-                    </div>
-                </div>
-            {% endif %}
+                        {% endif %}
         </div>
 
         <!-- Right Sidebar: User Activity -->

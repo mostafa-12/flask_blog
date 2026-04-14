@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Post Card -->
+            <article class="card shadow-sm border-0 mb-4">
+                <!-- Cover Image -->
+                {% if post.cover_image %}
+                    <img src="{{ url_for('static', filename='pics/' + post.cover_image) }}" alt="{{ post.title }}" class="card-img-top" style="object-fit: cover; height: 400px;">
+                {% endif %}
+
+                <div class="card-body">
+                    <!-- Post Header -->
+                    <h1 class="card-title fw-bold mb-3" style="font-size: 2.5rem; line-height: 1.2;">{{ post.title }}</h1>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                        <div>
+                            <p class="mb-1 text-muted">By <strong>{{ post.author.username }}</strong></p>
+                            <p class="text-muted small">{{ post.timestamp.strftime('%b %d, %Y at %I:%M %p') }}</p>
+                        </div>
+                        {% if current_user == post.author %}
+                            <div class="btn-group" role="group">
+                                <a href="#" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Post Content -->
+                    <div class="card-text mb-5" style="line-height: 1.8; font-size: 1.1rem;">
+                        {{ post.content | safe }}
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-2 mb-4">
+                        <a href="{{ url_for('main.posts') }}" class="btn btn-outline-secondary">← Back to Posts</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Comments Section -->
+            <section class="mt-5">
+                <h3 class="fw-bold mb-4">Comments</h3>
+
+                <!-- Add Comment Form -->
+                {% if current_user.is_authenticated and form %}
+                    <div class="card shadow-sm border-0 mb-4 p-4">
+                        <h5 class="mb-3">Add a Comment</h5>
+                        <form method="POST" action="#">
+                            {{ form.hidden_tag() }}
+                            <div class="mb-3">
+                                {{ form.content(class="form-control", rows="4", placeholder="Write your comment...") }}
+                                {% if form.content.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in form.content.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {{ form.submit(class="btn btn-primary") }}
+                        </form>
+                    </div>
+                {% elif not current_user.is_authenticated %}
+                    <div class="alert alert-info mb-4">
+                        <a href="{{ url_for('login') }}" class="alert-link">Log in</a> to add a comment.
+                    </div>
+                {% endif %}
+
+                <!-- Comments List -->
+                {% if comments %}
+                    <div class="comments-list">
+                        {% for comment in comments %}
+                            <div class="card shadow-sm border-0 mb-3 p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="mb-0 fw-bold">{{ comment.author.username }}</h6>
+                                    <small class="text-muted">{{ comment.date_posted.strftime('%B %d, %Y') }}</small>
+                                </div>
+                                <p class="mb-0 text-secondary">{{ comment.content }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-light border border-secondary">
+                        <p class="mb-0 text-muted">No comments yet. Be the first to comment!</p>
+                    </div>
+                {% endif %}
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock content %}
