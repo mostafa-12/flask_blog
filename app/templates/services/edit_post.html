@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-sm border-0 rounded-3">
+                <!-- Card Header -->
+                <div class="card-header bg-light border-0 rounded-top-3 py-4">
+                    <h2 class="card-title mb-1 fw-bold text-dark">Edit Post</h2>
+                    <p class="text-muted small mb-0">Update your post details</p>
+                </div>
+
+                <!-- Card Body -->
+                <div class="card-body p-4">
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Form -->
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {{ form.hidden_tag() }}
+
+                        <!-- Title Field -->
+                        <div class="mb-3">
+                            <label for="{{ form.title.id }}" class="form-label fw-semibold">{{ form.title.label }}</label>
+                            {% if form.title.errors %}
+                                {{ form.title(class="form-control is-invalid") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.title.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.title(class="form-control") }}
+                            {% endif %}
+                        </div>
+
+                        <!-- Content Field -->
+                        <div class="mb-3">
+                            <label for="{{ form.content.id }}" class="form-label fw-semibold">{{ form.content.label }}</label>
+                            {% if form.content.errors %}
+                                {{ form.content(class="form-control is-invalid", rows="6") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.content.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.content(class="form-control", rows="6") }}
+                            {% endif %}
+                        </div>
+
+                        <!-- Current Image Preview -->
+                        {% if post.cover_image %}
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Current Cover Image</label>
+                                <div class="position-relative">
+                                    <img src="{{ url_for('static', filename='pics/' + post.cover_image) }}" 
+                                             alt="Current post cover" 
+                                             class="img-fluid rounded-2" 
+                                             style="max-height: 250px; object-fit: cover; width: 100%;">
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Image Field -->
+                        <div class="mb-4">
+                            <label for="{{ form.cover_image.id }}" class="form-label fw-semibold">{{ form.cover_image.label }}</label>
+                            {% if form.cover_image.errors %}
+                                {{ form.cover_image(class="form-control is-invalid") }}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.cover_image.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.cover_image(class="form-control") }}
+                            {% endif %}
+                            <small class="text-muted d-block mt-2">Leave empty to keep the current image</small>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2 pt-2">
+                            {{ form.submit(class="btn btn-primary rounded-2 fw-semibold flex-grow-1", value="Update Post") }}
+                            <a href="{{ url_for('main.get_post', post_id=post.id) }}" class="btn btn-outline-secondary rounded-2 fw-semibold">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

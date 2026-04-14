@@ -77,4 +77,29 @@ def remove_post(post_id):
 @services.route("/edit_post/<int:post_id>", methods=['GET', 'POST'])
 @login_required
 def edit_post(post_id):
-    return "Edit Post - Coming Soon!"
+    post = Post.query.get_or_404(post_id)
+    form = PostForm()
+    if request.method == 'GET':    
+        form.title.data = post.title
+        form.content.data = post.content
+    if post.author.id != current_user.id:
+        flash("You are not authorized to edit this post.", "danger")
+        return redirect(url_for("main.profile"))
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+        if form.cover_image.data:
+            cover = save_pic_secure(form.cover_image.data)
+            post.cover_image = cover if cover else post.cover_image
+        try:
+            db.session.add(post)
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            flash('An error occurred while updating the post. Please try again.', 'danger')
+            return redirect(url_for("services.edit_post", post_id=post.id))
+        flash("Post updated successfully", "success")
+        return redirect(url_for("main.get_post", post_id=post.id))
+    
+    return render_template('services/edit_post.html', title='Edit Post', form=form, post=post)
+    

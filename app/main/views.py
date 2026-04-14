@@ -20,7 +20,7 @@ def posts():
 def profile():
     return render_template('main/dashboard.html', title= current_user.username + "'s Profile")
 
-@main.route('/profile/<int:post_id>')
+@main.route('/post/<int:post_id>')
 @login_required
 def get_post(post_id):
     post = Post.query.get_or_404(post_id)

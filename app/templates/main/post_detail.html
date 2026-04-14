@@ -34,8 +34,10 @@
                         </div>
                         {% if current_user == post.author %}
                             <div class="btn-group" role="group">
-                                <a href="#" class="btn btn-sm btn-outline-primary">Edit</a>
-                                <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
+                                <a href="{{url_for('services.edit_post', post_id=post.id)}}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <form action="{{ url_for('services.remove_post', post_id=post.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
                             </div>
                         {% endif %}
                     </div>
