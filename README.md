@@ -68,7 +68,7 @@ It demonstrates core backend concepts such as authentication, authorization, and
 <hr>
 
 ### User Dashboard
-![User Dashboard](./screenshots/profile.png)
+![User Dashboard](./screenshots/profile_page.png)
 
 ### Editing User details
 ![Editing User Page](./screenshots/edit_user.png)
