@@ -1,6 +1,8 @@
 from app.main import main
-from app.models import Post
-from flask import render_template, url_for
+from app.main.forms import CommentForm
+from app.models import Post, Comment
+from app.extensions import db
+from flask import render_template, url_for, redirect
 from flask_login import login_required, current_user
 
 @main.route('/')
@@ -20,8 +22,15 @@ def posts():
 def profile():
     return render_template('main/dashboard.html', title= current_user.username + "'s Profile")
 
-@main.route('/post/<int:post_id>')
+@main.route('/post/<int:post_id>', methods=['GET', 'POST'])
 @login_required
 def get_post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('main/post_detail.html', title=post.title, post=post)
+    comments = post.comments.order_by(Comment.timestamp.desc()).all()
+    comment_form = CommentForm()
+    if comment_form.validate_on_submit():
+        comment = Comment(content=comment_form.content.data, author=current_user, post=post)
+        db.session.add(comment)
+        db.session.commit()
+        return redirect(url_for('main.get_post', post_id=post.id))
+    return render_template('main/post_detail.html', title=post.title, post=post, comments=comments, comment_form=comment_form)

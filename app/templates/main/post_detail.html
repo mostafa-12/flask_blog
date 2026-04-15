@@ -59,22 +59,22 @@
                 <h3 class="fw-bold mb-4">Comments</h3>
 
                 <!-- Add Comment Form -->
-                {% if current_user.is_authenticated and form %}
+                {% if current_user.is_authenticated and comment_form %}
                     <div class="card shadow-sm border-0 mb-4 p-4">
                         <h5 class="mb-3">Add a Comment</h5>
                         <form method="POST" action="#">
-                            {{ form.hidden_tag() }}
+                            {{ comment_form.hidden_tag() }}
                             <div class="mb-3">
-                                {{ form.content(class="form-control", rows="4", placeholder="Write your comment...") }}
-                                {% if form.content.errors %}
+                                {{ comment_form.content(class="form-control", rows="4", placeholder="Write your comment...") }}
+                                {% if comment_form.content.errors %}
                                     <div class="invalid-feedback d-block">
-                                        {% for error in form.content.errors %}
+                                        {% for error in comment_form.content.errors %}
                                             {{ error }}
                                         {% endfor %}
                                     </div>
                                 {% endif %}
                             </div>
-                            {{ form.submit(class="btn btn-primary") }}
+                            {{ comment_form.submit(class="btn btn-primary") }}
                         </form>
                     </div>
                 {% elif not current_user.is_authenticated %}
@@ -90,7 +90,7 @@
                             <div class="card shadow-sm border-0 mb-3 p-4">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <h6 class="mb-0 fw-bold">{{ comment.author.username }}</h6>
-                                    <small class="text-muted">{{ comment.date_posted.strftime('%B %d, %Y') }}</small>
+                                    <small class="text-muted">{{ comment.timestamp.strftime('%b %d, %Y at %I:%M %p') }}</small>
                                 </div>
                                 <p class="mb-0 text-secondary">{{ comment.content }}</p>
                             </div>
