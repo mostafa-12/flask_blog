@@ -18,7 +18,7 @@ class LoginForm(FlaskForm):
         if user is None:
             self.email.errors.append("Email not found.")
             return False
-        if user.password != self.password.data:
+        if user.verify_password(self.password.data) == False:
             self.password.errors.append("Incorrect password.")
             return False
         return True
@@ -50,5 +50,5 @@ class ChangePasswordForm(FlaskForm):
     submit = SubmitField('Change Password')
     
     def validate_current_password(self, field):
-        if field.data != current_user.password:
+        if current_user.verify_password(field.data) == False:
             raise ValidationError('Current password is incorrect.')

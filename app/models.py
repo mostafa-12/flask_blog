@@ -9,14 +9,23 @@ class User(db.Model, UserMixin):
     role = db.Column(db.String(20), default="user")
     username = db.Column(db.String(64), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(128), nullable=False)
+    hashed_password = db.Column(db.String(128), nullable=False)
     joined_at = db.Column(db.DateTime, default=GET_TIME_NOW)
     profile_picture = db.Column(db.String(256), default= "default.jpg")
     posts = db.relationship("Post", backref="author", lazy="dynamic")
     comments = db.relationship("Comment", backref="author", lazy="dynamic")
     def __repr__(self):
         return f"<User {self.username}, {self.email}, {self.joined_at}>"
-    
+    @property
+    def password(self):
+        raise AttributeError("Password is not a readable attribute.")
+    @password.setter
+    def password(self, password):
+        from werkzeug.security import generate_password_hash
+        self.hashed_password = generate_password_hash(password)
+    def verify_password(self, password):
+        from werkzeug.security import check_password_hash
+        return check_password_hash(self.hashed_password, password)
     
     
 class Post(db.Model):
