@@ -20,7 +20,8 @@ def posts():
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('main/dashboard.html', title= current_user.username + "'s Profile")
+    comments = current_user.comments.order_by(Comment.timestamp.desc()).all()
+    return render_template('main/dashboard.html', title= current_user.username + "'s Profile", comments=comments)
 
 @main.route('/post/<int:post_id>', methods=['GET', 'POST'])
 @login_required
