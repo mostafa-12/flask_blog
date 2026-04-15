@@ -62,6 +62,39 @@ It demonstrates core backend concepts such as authentication, authorization, and
 * **Frontend:** HTML, CSS, Bootstrap
 
 ---
+## Screen Shots
+### Home Page
+![Home Page](./app/static/pics/home_page.png)
+<hr>
+
+### User Dashboard
+![User Dashboard](./app/static/pics/profile.png)
+
+### Editing User details
+![Editing User Page](./app/static/pics/edit_user.png)
+
+
+### Post Detail View
+![Post Detail](./app/static/pics/post_in_details.png)
+Individual post page with full content, comments section, and options to edit or delete (if authorized).
+
+### Create/Edit Post
+![Create Post](./app/static/pics/create_post.png)
+Form interface for creating new blog posts or editing existing ones with title, content, and submission options.
+
+### User Authentication
+![Login Page](./app/static/pics/signup_page.png)
+<hr>
+
+![Login Page](./app/static/pics/login_page.png)
+Secure login interface with credentials validation and link to registration for new users.
+<hr>
+
+![Reset Password Page](./app/static/pics/reset_password.png)
+
+
+
+---
 
 ## 🗂️ Project Structure
 
