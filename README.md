@@ -153,7 +153,7 @@ Secure login interface with credentials validation and link to registration for 
 1. Clone the repository:
 
 ```
-git clone https://github.com/yourusername/flask-blog.git
+git clone https://github.com/mostafa-12/flask-blog.git
 cd flask-blog
 ```
 
