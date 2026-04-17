@@ -61,10 +61,13 @@ def create_post():
 @login_required
 def remove_post(post_id):
     post = Post.query.get_or_404(post_id)
+    comments = post.comments.all()
     if post.author.id != current_user.id:
         flash("You are not authorized to delete this post.", "danger")
         return redirect(url_for("main.profile"))
     try:
+        for comment in comments:
+            db.session.delete(comment)
         db.session.delete(post)
         db.session.commit()
     except Exception as e:
