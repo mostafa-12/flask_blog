@@ -64,33 +64,33 @@ It demonstrates core backend concepts such as authentication, authorization, and
 ---
 ## Screen Shots
 ### Home Page
-![Home Page](./app/static/pics/home_page.png)
+![Home Page](./screenshots/home_page.png)
 <hr>
 
 ### User Dashboard
-![User Dashboard](./app/static/pics/profile.png)
+![User Dashboard](./screenshots/profile_page.png)
 
 ### Editing User details
-![Editing User Page](./app/static/pics/edit_user.png)
+![Editing User Page](./screenshots/edit_user.png)
 
 
 ### Post Detail View
-![Post Detail](./app/static/pics/post_in_details.png)
+![Post Detail](./screenshots/post_in_details.png)
 Individual post page with full content, comments section, and options to edit or delete (if authorized).
 
 ### Create/Edit Post
-![Create Post](./app/static/pics/create_post.png)
+![Create Post](./screenshots/create_post.png)
 Form interface for creating new blog posts or editing existing ones with title, content, and submission options.
 
 ### User Authentication
-![Login Page](./app/static/pics/signup_page.png)
+![Login Page](./screenshots/signup_page.png)
 <hr>
 
-![Login Page](./app/static/pics/login_page.png)
+![Login Page](./screenshots/login_page.png)
 Secure login interface with credentials validation and link to registration for new users.
 <hr>
 
-![Reset Password Page](./app/static/pics/reset_password.png)
+![Reset Password Page](./screenshots/reset_password.png)
 
 
 
@@ -153,7 +153,7 @@ Secure login interface with credentials validation and link to registration for 
 1. Clone the repository:
 
 ```
-git clone https://github.com/yourusername/flask-blog.git
+git clone https://github.com/mostafa-12/flask-blog.git
 cd flask-blog
 ```
 
